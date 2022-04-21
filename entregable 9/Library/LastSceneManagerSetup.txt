@@ -1,0 +1,5 @@
+sceneSetups:
+- path: C:/Users/Rowen/Desktop/entregable9-tomeu-de-la-parte-main/Assets/Scenes/Options.unity
+  isLoaded: 1
+  isActive: 1
+  isSubScene: 0
