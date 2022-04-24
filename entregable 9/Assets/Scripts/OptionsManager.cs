@@ -11,7 +11,7 @@ public class OptionsManager : MonoBehaviour
     public TMP_Dropdown difficultyUI;
     public TextMeshProUGUI roundNumber;
 
-    private string nickname = "User";
+    private string nickname = "username";
 
     private int difficulty = 0;
     private string[] difficultyNames = { "Principiante", "Intermedio", "Experto" };
@@ -37,34 +37,34 @@ public class OptionsManager : MonoBehaviour
         // Guarda el nombre
         nickname = name;
 
-        // Muestra por consola el Nickname insertado.
+        // Muestra por consola el nombre del user
         Debug.Log($"Usuario cambiado a {nickname}");
     }
 
     // Establece la dificultad
     public void SetDifficulty(int index)
     {
-        // Un switch según el valor de index
+        // Switch depende del index
         switch (index)
         {
-            // Si index es valor 0
+            // Index vale 0
             case 0:
 
-                // Guarda la dificultad y para la ejecución del Switch
+                // Guarda la dificultad y detiene el switch
                 difficulty = index;
                 break;
 
             // Si index es valor 1
             case 1:
 
-                // Guarda la dificultad y para la ejecución del Switch
+                // Guarda la dificultad y detenie el switch
                 difficulty = index;
                 break;
 
             // Si index es valor 2
             case 2:
 
-                // Guarda la dificultad y para la ejecución del Switch
+                // Guarda la dificultad y detiene el switch
                 difficulty = index;
                 break;
         }
@@ -76,7 +76,7 @@ public class OptionsManager : MonoBehaviour
     // Suma 1 ronda
     public void AddRounds()
     {
-        // Si el total de rondas es menor al máximo
+        // Total de rondas es menor al máximo
         if (totalRounds < maxRounds)
         {
             // Suma uno al total
@@ -93,10 +93,10 @@ public class OptionsManager : MonoBehaviour
     // Resta 1 ronda
     public void RemoveRounds()
     {
-        // Si el total de rondas es mayor al mínimo
+        // Total de rondas es mayor al mínimo
         if (totalRounds > minRounds)
         {
-            // Resta uno al toal
+            // Resta uno al total
             totalRounds--;
 
             // Cambia el valor mostrado por pantalla 
