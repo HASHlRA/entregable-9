@@ -6,33 +6,33 @@ using TMPro;
 
 public class OptionsManager : MonoBehaviour
 {
-    [Header("OPTIONS UI")]
+    // UI
     public TMP_InputField nicknameUI;
     public TMP_Dropdown difficultyUI;
     public Toggle AutoguardadoUI;
     public TextMeshProUGUI roundsUI;
     public Slider GraficosUI;
 
-    [Header("DEFAULT SETTINGS")]
+    // por defecto
     private string DefaultNickname = "Hashira";
     private int DefaultDifficulty = 0;
-    private bool DefaultAutoguardado = false;
+    private bool DefaultAutoguardado = true;
     private float DefaultGraficos = 0.5f;
     private int DefaultRounds = 3;
 
-    [Header("DATE PERSISTENCE")]
+    // data persistence
     private DataPersistence dataPersistence;
 
     private void Start()
     {
-        // Obtiene el el script Data Persistence
+        // obtiene el script datapersistence
         dataPersistence = FindObjectOfType<DataPersistence>();
 
-        // Obtiene las opciones guardadas
+        // guarda las opciones
         LoadSavedSettings();
     }
 
-    // Obtiene todas las opciones guardadas
+    // guarda las opciones
     private void LoadSavedSettings()
     {
         GetNickname();
@@ -42,135 +42,133 @@ public class OptionsManager : MonoBehaviour
         GetRounds();
     }
 
-    // G E T T E R S
 
-    // Obtiene la opcion Nickname guardada
+    // obtiene el nombre de usuario
     public void GetNickname()
     {
-        // Si no existe, guarda un valor predeterminado
+        // si no está, establece un valor
         if (!dataPersistence.HasKey("Nickname"))
         {
             SetNickname(DefaultNickname);
         }
 
-        // Obtiene el valor guardado
+        // recibe el valor
         nicknameUI.text = dataPersistence.GetString("Nickname");
     }
 
-    // Obtiene la opcion Difficulty guardada
+    // obtiene la dificultad
     public void GetDifficulty()
     {
-        // Si no existe, guarda un valor predeterminado
+        // si no está, establece un valor
         if (!dataPersistence.HasKey("Difficulty"))
         {
             SetDifficulty(DefaultDifficulty);
         }
 
-        // Obtiene el valor guardado
+        // recibe el valor
         difficultyUI.value = dataPersistence.GetInt("Difficulty");
     }
 
-    // Obtiene la opcion Godmode guardada
+    // obtiene el autoguardado
     public void GetAutoguardado()
     {
-        // Si no existe, guarda un valor predeterminado
+        // si no está, establece un valor
         if (!dataPersistence.HasKey("Autoguardado"))
         {
             SetAutoguardado(DefaultAutoguardado);
         }
 
-        // Obtiene el valor guardado
+        // recibe el valor
         AutoguardadoUI.isOn = dataPersistence.GetBool("Autoguardado");
     }
 
-    // Obtiene la opcion Graficos guardada
+    // obtiene los graficos
     public void GetGraficos()
     {
-        // Si no existe, guarda un valor predeterminado
+        // si no está, establece un valor
         if (!dataPersistence.HasKey("Graficos"))
         {
             SetGraficos(DefaultGraficos);
         }
 
-        // Obtiene el valor guardado
+        // recibe el valor
         GraficosUI.value = dataPersistence.GetFloat("Graficos");
     }
 
-    // Obtiene la opcion Rounds guardada
+    // obtiene las rondas
     public void GetRounds()
     {
-        // Si no existe, guarda un valor predeterminado
+        // si no está, establece un valor
         if (!dataPersistence.HasKey("Rounds"))
         {
             SetRounds(DefaultRounds);
         }
 
-        // Obtiene el valor guardado
+        // recibe el valor
         roundsUI.text = dataPersistence.GetInt("Rounds").ToString();
     }
 
-    // S E T T E R S
 
-    // Guarda la opcion Nickname con una key
+    // guarda el usuario
     public void SetNickname(string name)
     {
         dataPersistence.SetString("Nickname", name);
     }
 
-    // Guarda la opcion Difficulty con una key
+    // guarda la dificultad
     public void SetDifficulty(int index)
     {
         dataPersistence.SetInt("Difficulty", index);
     }
 
-    // Guarda la opcion Godmode con una key
+    // guarda el autoguardado
     public void SetAutoguardado(bool mode)
     {
         dataPersistence.SetBool("Autoguardado", mode);
     }
 
 
-    // Guarda la opcion Graficos con una key
+    // guarda los graficos
     public void SetGraficos(float quality)
     {
         dataPersistence.SetFloat("Graficos", quality);
     }
 
-    // Guarda la opcion Rounds con una key
+    // guarda las rondas
     public void SetRounds(int rounds)
     {
         dataPersistence.SetInt("Rounds", rounds);
     }
 
-    // Añade +1 al número rondas y guarda el valor
+    // añade 1 ronda
     public void AddRounds()
     {
-        // Guarda el texto parseado a int y sumado +1
+        // texto + 1
         int temp = int.Parse(roundsUI.text) + 1;
 
-        // Limita el valor de temp entre 1 y 10
+        // min. 1 - max. 10
         temp = Mathf.Clamp(temp, 1, 10);
 
-        // Actualiza el valor en la UI
+        // actualiza
         roundsUI.text = temp.ToString();
 
-        // Guarda el valor
+        // lo guarda
         SetRounds(temp);
     }
 
-    // Quita -1 al número rondas y guarda el valor
+    // resta 1 ronda
     public void RemoveRounds()
     {
-        // Guarda el texto parseado a int y restado -1
+        // texto - 1
         int temp = int.Parse(roundsUI.text) - 1;
 
-        // Limita el valor entre 1 y 10
+        // min. 1 - max. 10
         temp = Mathf.Clamp(temp, 1, 10);
 
-        // Actualiza el valor en la UI
+        // actualiza
         roundsUI.text = temp.ToString();
 
-        // Guarda el valor
+        // lo guarda
         SetRounds(temp);
     }
 }
