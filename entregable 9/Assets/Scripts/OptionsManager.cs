@@ -6,104 +6,171 @@ using TMPro;
 
 public class OptionsManager : MonoBehaviour
 {
-    // variables
+    [Header("OPTIONS UI")]
     public TMP_InputField nicknameUI;
     public TMP_Dropdown difficultyUI;
-    public TextMeshProUGUI roundNumber;
+    public Toggle AutoguardadoUI;
+    public TextMeshProUGUI roundsUI;
+    public Slider GraficosUI;
 
-    private string nickname = "username";
+    [Header("DEFAULT SETTINGS")]
+    private string DefaultNickname = "Hashira";
+    private int DefaultDifficulty = 0;
+    private bool DefaultAutoguardado = false;
+    private float DefaultGraficos = 0.5f;
+    private int DefaultRounds = 3;
 
-    private int difficulty = 0;
-    private string[] difficultyNames = { "Principiante", "Intermedio", "Experto" };
+    [Header("DATE PERSISTENCE")]
+    private DataPersistence dataPersistence;
 
-    private int totalRounds = 3;
-    private int maxRounds = 6;
-    private int minRounds = 1;
-    
-
-
-    // Al iniciar el juego
     private void Start()
     {
-        nicknameUI.text = nickname;
-        difficultyUI.value = difficulty;
-        roundNumber.text = totalRounds.ToString();
+        // Obtiene el el script Data Persistence
+        dataPersistence = FindObjectOfType<DataPersistence>();
+
+        // Obtiene las opciones guardadas
+        LoadSavedSettings();
     }
 
+    // Obtiene todas las opciones guardadas
+    private void LoadSavedSettings()
+    {
+        GetNickname();
+        GetDifficulty();
+        GetAutoguardado();
+        GetGraficos();
+        GetRounds();
+    }
 
-    // Establece el nombre de usuario
+    // G E T T E R S
+
+    // Obtiene la opcion Nickname guardada
+    public void GetNickname()
+    {
+        // Si no existe, guarda un valor predeterminado
+        if (!dataPersistence.HasKey("Nickname"))
+        {
+            SetNickname(DefaultNickname);
+        }
+
+        // Obtiene el valor guardado
+        nicknameUI.text = dataPersistence.GetString("Nickname");
+    }
+
+    // Obtiene la opcion Difficulty guardada
+    public void GetDifficulty()
+    {
+        // Si no existe, guarda un valor predeterminado
+        if (!dataPersistence.HasKey("Difficulty"))
+        {
+            SetDifficulty(DefaultDifficulty);
+        }
+
+        // Obtiene el valor guardado
+        difficultyUI.value = dataPersistence.GetInt("Difficulty");
+    }
+
+    // Obtiene la opcion Godmode guardada
+    public void GetAutoguardado()
+    {
+        // Si no existe, guarda un valor predeterminado
+        if (!dataPersistence.HasKey("Autoguardado"))
+        {
+            SetAutoguardado(DefaultAutoguardado);
+        }
+
+        // Obtiene el valor guardado
+        AutoguardadoUI.isOn = dataPersistence.GetBool("Autoguardado");
+    }
+
+    // Obtiene la opcion Graficos guardada
+    public void GetGraficos()
+    {
+        // Si no existe, guarda un valor predeterminado
+        if (!dataPersistence.HasKey("Graficos"))
+        {
+            SetGraficos(DefaultGraficos);
+        }
+
+        // Obtiene el valor guardado
+        GraficosUI.value = dataPersistence.GetFloat("Graficos");
+    }
+
+    // Obtiene la opcion Rounds guardada
+    public void GetRounds()
+    {
+        // Si no existe, guarda un valor predeterminado
+        if (!dataPersistence.HasKey("Rounds"))
+        {
+            SetRounds(DefaultRounds);
+        }
+
+        // Obtiene el valor guardado
+        roundsUI.text = dataPersistence.GetInt("Rounds").ToString();
+    }
+
+    // S E T T E R S
+
+    // Guarda la opcion Nickname con una key
     public void SetNickname(string name)
     {
-        // Guarda el nombre
-        nickname = name;
-
-        // Muestra por consola el nombre del user
-        Debug.Log($"Usuario cambiado a {nickname}");
+        dataPersistence.SetString("Nickname", name);
     }
 
-    // Establece la dificultad
+    // Guarda la opcion Difficulty con una key
     public void SetDifficulty(int index)
     {
-        // Switch depende del index
-        switch (index)
-        {
-            // Index vale 0
-            case 0:
-
-                // Guarda la dificultad y detiene el switch
-                difficulty = index;
-                break;
-
-            // Si index es valor 1
-            case 1:
-
-                // Guarda la dificultad y detenie el switch
-                difficulty = index;
-                break;
-
-            // Si index es valor 2
-            case 2:
-
-                // Guarda la dificultad y detiene el switch
-                difficulty = index;
-                break;
-        }
-
-        // Muestra por consola la dificultad seleccionada.
-        Debug.Log($" Modo {difficultyNames[difficulty]}");
+        dataPersistence.SetInt("Difficulty", index);
     }
 
-    // Suma 1 ronda
+    // Guarda la opcion Godmode con una key
+    public void SetAutoguardado(bool mode)
+    {
+        dataPersistence.SetBool("Autoguardado", mode);
+    }
+
+
+    // Guarda la opcion Graficos con una key
+    public void SetGraficos(float quality)
+    {
+        dataPersistence.SetFloat("Graficos", quality);
+    }
+
+    // Guarda la opcion Rounds con una key
+    public void SetRounds(int rounds)
+    {
+        dataPersistence.SetInt("Rounds", rounds);
+    }
+
+    // Añade +1 al número rondas y guarda el valor
     public void AddRounds()
     {
-        // Total de rondas es menor al máximo
-        if (totalRounds < maxRounds)
-        {
-            // Suma uno al total
-            totalRounds++;
+        // Guarda el texto parseado a int y sumado +1
+        int temp = int.Parse(roundsUI.text) + 1;
 
-            // Cambia el valor mostrado por pantalla
-            roundNumber.text = totalRounds.ToString();
+        // Limita el valor de temp entre 1 y 10
+        temp = Mathf.Clamp(temp, 1, 10);
 
-            // Muestra en consola
-            Debug.Log($" Número de rondas {totalRounds}");
-        }
+        // Actualiza el valor en la UI
+        roundsUI.text = temp.ToString();
+
+        // Guarda el valor
+        SetRounds(temp);
     }
 
-    // Resta 1 ronda
+    // Quita -1 al número rondas y guarda el valor
     public void RemoveRounds()
     {
-        // Total de rondas es mayor al mínimo
-        if (totalRounds > minRounds)
-        {
-            // Resta uno al total
-            totalRounds--;
+        // Guarda el texto parseado a int y restado -1
+        int temp = int.Parse(roundsUI.text) - 1;
 
-            // Cambia el valor mostrado por pantalla 
-            roundNumber.text = totalRounds.ToString();
+        // Limita el valor entre 1 y 10
+        temp = Mathf.Clamp(temp, 1, 10);
 
-            // Muestra en consola
-            Debug.Log($" Número de rondas {totalRounds}");
-        }
+        // Actualiza el valor en la UI
+        roundsUI.text = temp.ToString();
+
+        // Guarda el valor
+        SetRounds(temp);
     }
 }
